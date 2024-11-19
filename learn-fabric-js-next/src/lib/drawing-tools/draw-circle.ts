@@ -1,16 +1,16 @@
-import { Canvas, Circle } from "fabric";
+import * as fabric from "fabric";
 import { DrawingTool, Point } from "./index";
 
-let activeShape: Circle | null = null;
+let activeShape: fabric.Circle | null = null;
 let startPoint: Point | null = null;
 
 export const drawCircle: DrawingTool = {
   name: "circle",
   cursor: "crosshair",
 
-  handleMouseDown: (canvas: Canvas, pointer: Point) => {
+  handleMouseDown: (canvas: fabric.Canvas, pointer: Point) => {
     startPoint = pointer;
-    activeShape = new Circle({
+    activeShape = new fabric.Circle({
       left: pointer.x,
       top: pointer.y,
       radius: 0,
@@ -23,7 +23,7 @@ export const drawCircle: DrawingTool = {
     canvas.add(activeShape);
   },
 
-  handleMouseMove: (canvas: Canvas, pointer: Point) => {
+  handleMouseMove: (canvas: fabric.Canvas, pointer: Point) => {
     if (!activeShape || !startPoint) return;
 
     // Calculate radius based on distance from start point
@@ -46,7 +46,7 @@ export const drawCircle: DrawingTool = {
     canvas.renderAll();
   },
 
-  handleMouseUp: (canvas: Canvas) => {
+  handleMouseUp: (canvas: fabric.Canvas) => {
     if (activeShape) {
       canvas.setActiveObject(activeShape);
       activeShape = null;

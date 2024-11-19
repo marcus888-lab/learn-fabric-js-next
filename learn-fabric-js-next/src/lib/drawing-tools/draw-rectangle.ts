@@ -1,7 +1,7 @@
-import { Canvas, Rect } from "fabric";
+import * as fabric from "fabric";
 import { DrawingTool, Point } from "./index";
 
-let activeShape: Rect | null = null;
+let activeShape: fabric.Rect | null = null;
 let startPoint: Point | null = null;
 let isDrawing = false;
 
@@ -9,12 +9,12 @@ export const drawRectangle: DrawingTool = {
   name: "rectangle",
   cursor: "crosshair",
 
-  handleMouseDown: (canvas: Canvas, pointer: Point) => {
+  handleMouseDown: (canvas: fabric.Canvas, pointer: Point) => {
     if (isDrawing) return;
 
     isDrawing = true;
     startPoint = pointer;
-    activeShape = new Rect({
+    activeShape = new fabric.Rect({
       left: pointer.x,
       top: pointer.y,
       width: 0,
@@ -28,7 +28,7 @@ export const drawRectangle: DrawingTool = {
     canvas.add(activeShape);
   },
 
-  handleMouseMove: (canvas: Canvas, pointer: Point) => {
+  handleMouseMove: (canvas: fabric.Canvas, pointer: Point) => {
     if (!activeShape || !startPoint || !isDrawing) return;
 
     const width = Math.abs(startPoint.x - pointer.x);
@@ -46,7 +46,7 @@ export const drawRectangle: DrawingTool = {
     canvas.renderAll();
   },
 
-  handleMouseUp: (canvas: Canvas) => {
+  handleMouseUp: (canvas: fabric.Canvas) => {
     if (!isDrawing) return;
 
     if (activeShape) {

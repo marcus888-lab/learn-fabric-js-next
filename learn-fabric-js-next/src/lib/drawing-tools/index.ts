@@ -1,15 +1,26 @@
 import { Canvas, Object as FabricObject } from "fabric";
+export { drawRectangle } from "./draw-rectangle";
+export { drawCircle } from "./draw-circle";
+export { drawTriangle } from "./draw-triangle";
+export { drawText } from "./draw-text";
+export { drawBrush } from "./draw-brush";
+export { drawEraser } from "./draw-eraser";
+export { drawLine } from "./draw-line";
+export { drawPolygon } from "./draw-polygon";
 
-export type Point = { x: number; y: number };
+export interface Point {
+  x: number;
+  y: number;
+}
 
 export interface DrawingTool {
   name: string;
+  cursor: string;
   init?: (canvas: Canvas) => void;
   handleMouseDown?: (canvas: Canvas, pointer: Point) => void;
   handleMouseMove?: (canvas: Canvas, pointer: Point) => void;
-  handleMouseUp?: (canvas: Canvas) => void;
+  handleMouseUp?: (canvas: Canvas, pointer: Point) => void;
   cleanUp?: (canvas: Canvas) => void;
-  cursor: string;
 }
 
 export interface DrawingToolContext {
@@ -71,7 +82,7 @@ export const initializeDrawingTool = (
     tool.handleMouseMove?.(canvas, pointer);
   });
 
-  canvas.on("mouse:up", () => {
+  canvas.on("mouse:up", (options) => {
     if (isDragging) {
       isDragging = false;
       return;
@@ -79,7 +90,10 @@ export const initializeDrawingTool = (
 
     if (!context.isDrawing) return;
     context.isDrawing = false;
-    tool.handleMouseUp?.(canvas);
+    if (context.startPoint) {
+      const pointer = canvas.getPointer(options.e);
+      tool.handleMouseUp?.(canvas, pointer);
+    }
     if (context.currentShape) {
       addObject(context.currentShape);
       context.currentShape = undefined;
@@ -95,10 +109,3 @@ export const initializeDrawingTool = (
     canvas.off("mouse:up");
   };
 };
-
-export * from "./draw-rectangle";
-export * from "./draw-circle";
-export * from "./draw-triangle";
-export * from "./draw-text";
-export * from "./draw-brush";
-export * from "./draw-eraser";

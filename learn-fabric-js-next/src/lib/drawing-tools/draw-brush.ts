@@ -1,17 +1,17 @@
-import { Canvas, PencilBrush } from "fabric";
+import * as fabric from "fabric";
 import { DrawingTool } from "./index";
 
 export const drawBrush: DrawingTool = {
   name: "brush",
   cursor: "crosshair",
 
-  init: (canvas: Canvas) => {
+  init: (canvas: fabric.Canvas) => {
     // Enable drawing mode
     canvas.isDrawingMode = true;
 
     // Initialize brush if not already done
     if (!canvas.freeDrawingBrush) {
-      canvas.freeDrawingBrush = new PencilBrush(canvas);
+      canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
     }
 
     // Configure brush
@@ -21,7 +21,7 @@ export const drawBrush: DrawingTool = {
 
   // No need for mouse handlers as fabric handles the drawing mode internally
 
-  cleanUp: (canvas: Canvas) => {
+  cleanUp: (canvas: fabric.Canvas) => {
     // Disable drawing mode when switching tools
     canvas.isDrawingMode = false;
   },

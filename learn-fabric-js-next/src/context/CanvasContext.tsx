@@ -10,7 +10,9 @@ export type DrawingTool =
   | "triangle"
   | "text"
   | "brush"
-  | "eraser";
+  | "eraser"
+  | "line"
+  | "polygon";
 
 interface CanvasContextType {
   canvas: Canvas | null;

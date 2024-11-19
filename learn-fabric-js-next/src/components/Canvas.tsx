@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
-import { Canvas as FabricCanvas, Object as FabricObject } from "fabric";
-import { useCanvasContext } from "../context/CanvasContext";
+import * as fabric from "fabric";
+import {
+  useCanvasContext,
+  DrawingTool as ToolType,
+} from "../context/CanvasContext";
 import { useObject } from "../context/ObjectContext";
 import { initializeDrawingTool } from "../lib/drawing-tools";
 import {
@@ -12,11 +15,14 @@ import {
   drawText,
   drawBrush,
   drawEraser,
+  drawLine,
+  drawPolygon,
+  DrawingTool,
 } from "../lib/drawing-tools";
 
 const Canvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const canvasInstanceRef = useRef<FabricCanvas | null>(null);
+  const canvasInstanceRef = useRef<fabric.Canvas | null>(null);
   const { currentTool, setCurrentTool, setCanvas, addObject } =
     useCanvasContext();
   const { selectObject } = useObject();
@@ -26,7 +32,7 @@ const Canvas: React.FC = () => {
     if (!canvasRef.current) return;
 
     console.log("Canvas: Initializing");
-    const canvas = new FabricCanvas(canvasRef.current, {
+    const canvas = new fabric.Canvas(canvasRef.current, {
       width: 800,
       height: 600,
       backgroundColor: "white",
@@ -39,40 +45,21 @@ const Canvas: React.FC = () => {
     setCanvas(canvas);
 
     // Selection handlers
-    function handleObjectSelect(e: { selected?: FabricObject[] }) {
-      console.log("Canvas: Selection event triggered");
-
+    function handleObjectSelect(e: { selected?: fabric.Object[] }) {
       if (e.selected?.[0]) {
         const obj = e.selected[0];
-        console.log("Canvas: Object selected", {
-          type: obj.type,
-          fill: obj.fill,
-          opacity: obj.opacity,
-        });
-
-        // Ensure the object is active
         canvas.setActiveObject(obj);
         canvas.requestRenderAll();
-
-        // Update context
-        requestAnimationFrame(() => {
-          selectObject(obj);
-        });
+        selectObject(obj);
       }
     }
 
     function handleSelectionClear() {
-      console.log("Canvas: Selection cleared");
       selectObject(null);
     }
 
-    function handleObjectModified(e: { target: FabricObject }) {
+    function handleObjectModified(e: { target: fabric.Object }) {
       if (e.target) {
-        console.log("Canvas: Object modified", {
-          type: e.target.type,
-          fill: e.target.fill,
-          opacity: e.target.opacity,
-        });
         e.target.setCoords();
         canvas.requestRenderAll();
       }
@@ -84,9 +71,6 @@ const Canvas: React.FC = () => {
       "selection:updated": handleObjectSelect,
       "selection:cleared": handleSelectionClear,
       "object:modified": handleObjectModified,
-      "object:added": (e: { target: FabricObject }) => {
-        console.log("Canvas: Object added", e.target);
-      },
     });
 
     // Enable selection by default
@@ -94,7 +78,6 @@ const Canvas: React.FC = () => {
 
     // Cleanup
     return () => {
-      console.log("Canvas: Cleaning up");
       canvas.off({
         "selection:created": handleObjectSelect,
         "selection:updated": handleObjectSelect,
@@ -111,13 +94,15 @@ const Canvas: React.FC = () => {
     const canvas = canvasInstanceRef.current;
     if (!canvas) return;
 
-    const tools: Record<string, typeof drawRectangle> = {
+    const tools: Record<string, DrawingTool> = {
       rectangle: drawRectangle,
       circle: drawCircle,
       triangle: drawTriangle,
       text: drawText,
       brush: drawBrush,
       eraser: drawEraser,
+      line: drawLine,
+      polygon: drawPolygon,
     };
 
     const selectedTool = tools[currentTool];
@@ -129,14 +114,26 @@ const Canvas: React.FC = () => {
       return;
     }
 
+    // Add ESC key handler for polygon tool
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && currentTool === "polygon") {
+        setCurrentTool("select" as ToolType);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
     const cleanup = initializeDrawingTool(
       canvas,
       selectedTool,
       addObject,
-      (tool: string | null) => setCurrentTool(tool as any)
+      (tool: string | null) => setCurrentTool((tool || "select") as ToolType)
     );
 
-    return cleanup;
+    return () => {
+      cleanup?.();
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [currentTool, addObject, setCurrentTool]);
 
   return (

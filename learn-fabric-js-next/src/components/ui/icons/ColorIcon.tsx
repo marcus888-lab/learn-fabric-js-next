@@ -1,4 +1,4 @@
-export function ColorIcon() {
+export default function ColorIcon() {
   return (
     <svg
       width="24"

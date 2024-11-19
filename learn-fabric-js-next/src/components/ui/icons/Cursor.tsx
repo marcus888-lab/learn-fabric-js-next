@@ -1,6 +1,7 @@
-export default function StrokeWidthIcon() {
+export default function CursorIcon() {
   return (
     <svg
+      xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -10,7 +11,7 @@ export default function StrokeWidthIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <line x1="4" y1="12" x2="20" y2="12" strokeWidth="4" />
+      <path d="M4 4l7.07 17 2.51-7.39L21 11.07z" />
     </svg>
   );
 }

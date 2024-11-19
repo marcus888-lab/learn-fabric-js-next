@@ -2,13 +2,14 @@
 
 import React, { useCallback, useState } from "react";
 import { Button } from "./ui/button";
-import { ColorIcon, OpacityIcon, StrokeWidthIcon } from "./ui/icons";
+import { ColorIcon, OpacityIcon } from "./ui/icons";
 import {
   FeatureToolbarProps,
   ObjectProperties,
   PropertyType,
   PROPERTY_DEFINITIONS,
 } from "../types/feature-tools";
+import StrokeWidthIcon from "./ui/icons/StrokeWidthIcon";
 
 const IconComponents = {
   ColorIcon,

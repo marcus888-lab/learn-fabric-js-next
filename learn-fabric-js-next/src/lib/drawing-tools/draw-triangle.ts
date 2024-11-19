@@ -1,16 +1,16 @@
-import { Canvas, Triangle } from "fabric";
+import * as fabric from "fabric";
 import { DrawingTool, Point } from "./index";
 
-let activeShape: Triangle | null = null;
+let activeShape: fabric.Triangle | null = null;
 let startPoint: Point | null = null;
 
 export const drawTriangle: DrawingTool = {
   name: "triangle",
   cursor: "crosshair",
 
-  handleMouseDown: (canvas: Canvas, pointer: Point) => {
+  handleMouseDown: (canvas: fabric.Canvas, pointer: Point) => {
     startPoint = pointer;
-    activeShape = new Triangle({
+    activeShape = new fabric.Triangle({
       left: pointer.x,
       top: pointer.y,
       width: 0,
@@ -24,7 +24,7 @@ export const drawTriangle: DrawingTool = {
     canvas.add(activeShape);
   },
 
-  handleMouseMove: (canvas: Canvas, pointer: Point) => {
+  handleMouseMove: (canvas: fabric.Canvas, pointer: Point) => {
     if (!activeShape || !startPoint) return;
 
     const width = Math.abs(startPoint.x - pointer.x);
@@ -42,7 +42,7 @@ export const drawTriangle: DrawingTool = {
     canvas.renderAll();
   },
 
-  handleMouseUp: (canvas: Canvas) => {
+  handleMouseUp: (canvas: fabric.Canvas) => {
     if (activeShape) {
       canvas.setActiveObject(activeShape);
       activeShape = null;

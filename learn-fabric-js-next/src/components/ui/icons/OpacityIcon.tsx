@@ -1,4 +1,4 @@
-export function OpacityIcon() {
+export default function OpacityIcon() {
   return (
     <svg
       width="24"
