@@ -30,6 +30,10 @@ class ConnectionLine extends fabric.Line {
     this.source = source;
     this.target = target;
 
+    // Initially hide the circles
+    this.source.set("fill", "transparent");
+    this.target.set("fill", "transparent");
+
     // Update line position when circles move
     source.on("moving", () => {
       this.updatePosition();
@@ -37,6 +41,20 @@ class ConnectionLine extends fabric.Line {
     });
     target.on("moving", () => {
       this.updatePosition();
+      this.canvas?.requestRenderAll();
+    });
+
+    // Show circles in any selected state
+    this.on("selected", this.showCircles.bind(this));
+    this.on("moving", this.showCircles.bind(this));
+    this.on("scaling", this.showCircles.bind(this));
+    this.on("rotating", this.showCircles.bind(this));
+    this.on("mousedown", this.showCircles.bind(this));
+
+    // Hide circles when deselected
+    this.on("deselected", () => {
+      this.source.set("fill", "transparent");
+      this.target.set("fill", "transparent");
       this.canvas?.requestRenderAll();
     });
 
@@ -73,6 +91,12 @@ class ConnectionLine extends fabric.Line {
     });
 
     this.updatePosition();
+  }
+
+  showCircles() {
+    this.source.set("fill", "red");
+    this.target.set("fill", "red");
+    this.canvas?.requestRenderAll();
   }
 
   updatePosition() {
@@ -207,7 +231,7 @@ export const drawLine: DrawingTool = {
       left: startPoint.x - 5,
       top: startPoint.y - 5,
       radius: 5,
-      fill: "red",
+      fill: "transparent",
       selectable: true,
       hasControls: false,
       hasBorders: false,
@@ -217,7 +241,7 @@ export const drawLine: DrawingTool = {
       left: pointer.x - 5,
       top: pointer.y - 5,
       radius: 5,
-      fill: "red",
+      fill: "transparent",
       selectable: true,
       hasControls: false,
       hasBorders: false,
