@@ -1,7 +1,6 @@
-export default function TriangleIcon() {
+export function OpacityIcon() {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -11,7 +10,7 @@ export default function TriangleIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M3 20h18L12 4z" />
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
     </svg>
   );
 }

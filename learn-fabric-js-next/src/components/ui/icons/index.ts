@@ -1,6 +1,9 @@
-export { default as Brush } from "./Brush";
-export { default as Circle } from "./Circle";
-export { default as Eraser } from "./Eraser";
-export { default as Rectangle } from "./Rectangle";
-export { default as Text } from "./Text";
-export { default as Triangle } from "./Triangle";
+export * from "./Brush";
+export * from "./Circle";
+export * from "./Eraser";
+export * from "./Rectangle";
+export * from "./Text";
+export * from "./Triangle";
+export * from "./ColorIcon";
+export * from "./OpacityIcon";
+export * from "./StrokeWidthIcon";

@@ -1,7 +1,6 @@
-export default function TriangleIcon() {
+export function StrokeWidthIcon() {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -11,7 +10,7 @@ export default function TriangleIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M3 20h18L12 4z" />
+      <line x1="4" y1="12" x2="20" y2="12" strokeWidth="4" />
     </svg>
   );
 }

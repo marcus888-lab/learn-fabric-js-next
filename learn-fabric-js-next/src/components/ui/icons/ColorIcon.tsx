@@ -1,7 +1,6 @@
-export default function TriangleIcon() {
+export function ColorIcon() {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -11,7 +10,8 @@ export default function TriangleIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M3 20h18L12 4z" />
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2v20M2 12h20" />
     </svg>
   );
 }

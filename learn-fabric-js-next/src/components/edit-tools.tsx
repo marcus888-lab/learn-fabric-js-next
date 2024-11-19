@@ -1,37 +1,46 @@
 "use client";
 
 import React from "react";
-import { useCanvasContext } from "../context/CanvasContext";
+import { useCanvasContext, DrawingTool } from "@/context/CanvasContext";
 import { Button } from "./ui/button";
-import { Rectangle, Circle, Triangle, Text, Brush, Eraser } from "./ui/icons";
+import RectangleIcon from "./ui/icons/Rectangle";
+import CircleIcon from "./ui/icons/Circle";
+import TriangleIcon from "./ui/icons/Triangle";
+import TextIcon from "./ui/icons/Text";
+import BrushIcon from "./ui/icons/Brush";
+import EraserIcon from "./ui/icons/Eraser";
+import { cn } from "@/lib/utils";
 
-export const EditTools = () => {
+export function EditTools({ className }: { className?: string }) {
   const { currentTool, setCurrentTool } = useCanvasContext();
 
-  const tools = [
-    { name: "rectangle", icon: <Rectangle />, label: "Rectangle" },
-    { name: "circle", icon: <Circle />, label: "Circle" },
-    { name: "triangle", icon: <Triangle />, label: "Triangle" },
-    { name: "text", icon: <Text />, label: "Text" },
-    { name: "brush", icon: <Brush />, label: "Brush" },
-    { name: "eraser", icon: <Eraser />, label: "Eraser" },
+  const tools: { id: DrawingTool; icon: React.ReactNode }[] = [
+    { id: "rectangle", icon: <RectangleIcon /> },
+    { id: "circle", icon: <CircleIcon /> },
+    { id: "triangle", icon: <TriangleIcon /> },
+    { id: "text", icon: <TextIcon /> },
+    { id: "brush", icon: <BrushIcon /> },
+    { id: "eraser", icon: <EraserIcon /> },
   ];
 
   return (
-    <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-md">
-      <div className="grid grid-cols-3 gap-2">
-        {tools.map((tool) => (
-          <Button
-            key={tool.name}
-            onClick={() => setCurrentTool(tool.name)}
-            variant={currentTool === tool.name ? "default" : "outline"}
-            className="flex flex-col items-center gap-1 p-2"
-          >
-            <span className="w-6 h-6">{tool.icon}</span>
-            <span className="text-xs">{tool.label}</span>
-          </Button>
-        ))}
-      </div>
+    <div
+      className={cn(
+        " flex flex-col gap-2 p-4 bg-white rounded-lg shadow",
+        className
+      )}
+    >
+      {tools.map((tool) => (
+        <Button
+          key={tool.id}
+          onClick={() => setCurrentTool(tool.id)}
+          variant={currentTool === tool.id ? "default" : "outline"}
+          size="icon"
+          className="w-10 h-10"
+        >
+          {tool.icon}
+        </Button>
+      ))}
     </div>
   );
-};
+}

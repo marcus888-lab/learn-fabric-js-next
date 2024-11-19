@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { CanvasProvider } from "@/context/CanvasContext";
+import { ObjectProvider } from "@/context/ObjectContext";
 
 export const metadata: Metadata = {
-  title: "Fabric.js Canvas Tutorial",
-  description: "Interactive canvas drawing with Fabric.js",
+  title: "Fabric.js Next.js App",
+  description: "A drawing app built with Fabric.js and Next.js",
 };
 
 export default function RootLayout({
@@ -16,7 +15,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <CanvasProvider>
+          <ObjectProvider>{children}</ObjectProvider>
+        </CanvasProvider>
+      </body>
     </html>
   );
 }

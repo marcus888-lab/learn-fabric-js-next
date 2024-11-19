@@ -1,22 +1,19 @@
-"use client";
-
-import React from "react";
-
-interface BrushIconProps {
-  className?: string;
-}
-
-const Brush: React.FC<BrushIconProps> = ({ className }) => {
+export default function BrushIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
-      fill="currentColor"
-      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <path d="M18.37 2.63a1.414 1.414 0 0 0-2 0L11 8.99l-1.414-1.414a1.414 1.414 0 1 0-2 2L9 11l-5.36 5.36a2.5 2.5 0 0 0-.64 2.34l.67 2.68a.5.5 0 0 0 .61.61l2.68.67a2.5 2.5 0 0 0 2.34-.64L13 15l1.414 1.414a1.414 1.414 0 1 0 2-2L15 13l6.36-6.36a1.414 1.414 0 0 0 0-2z" />
+      <path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3Z" />
+      <path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7" />
+      <path d="M14.5 17.5 4.5 15" />
     </svg>
   );
-};
-
-export default Brush;
+}
