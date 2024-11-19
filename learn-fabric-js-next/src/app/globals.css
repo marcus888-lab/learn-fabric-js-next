@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-100;
+}
+
+canvas {
+  @apply border border-gray-300 shadow-md;
+}
+
+.fabric-canvas-container {
+  @apply border border-gray-300 shadow-md;
+}
