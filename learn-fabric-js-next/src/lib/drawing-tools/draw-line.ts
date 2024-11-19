@@ -10,6 +10,9 @@ let selectedObject: fabric.Object | null = null;
 class ConnectionLine extends fabric.Line {
   source: fabric.Circle;
   target: fabric.Circle;
+  private hitboxPadding = 5;
+  private lastLeft: number = 0;
+  private lastTop: number = 0;
 
   constructor(
     source: fabric.Circle,
@@ -19,16 +22,55 @@ class ConnectionLine extends fabric.Line {
     const points: [number, number, number, number] = [0, 0, 0, 0];
     super(points, {
       ...options,
-      selectable: false,
-      evented: false,
+      hasBorders: false,
+      hasControls: false,
+      perPixelTargetFind: true,
     });
 
     this.source = source;
     this.target = target;
 
     // Update line position when circles move
-    source.on("moving", this.updatePosition.bind(this));
-    target.on("moving", this.updatePosition.bind(this));
+    source.on("moving", () => {
+      this.updatePosition();
+      this.canvas?.requestRenderAll();
+    });
+    target.on("moving", () => {
+      this.updatePosition();
+      this.canvas?.requestRenderAll();
+    });
+
+    // Handle line movement
+    this.on("moving", () => {
+      const dx = this.left! - this.lastLeft;
+      const dy = this.top! - this.lastTop;
+
+      // Move circles with the line
+      this.source.set({
+        left: this.source.left! + dx,
+        top: this.source.top! + dy,
+      });
+      this.target.set({
+        left: this.target.left! + dx,
+        top: this.target.top! + dy,
+      });
+
+      this.source.setCoords();
+      this.target.setCoords();
+      this.updatePosition();
+
+      // Store current position for next move
+      this.lastLeft = this.left!;
+      this.lastTop = this.top!;
+
+      this.canvas?.requestRenderAll();
+    });
+
+    this.on("mousedown", () => {
+      // Store initial position when starting to move
+      this.lastLeft = this.left!;
+      this.lastTop = this.top!;
+    });
 
     this.updatePosition();
   }
@@ -52,9 +94,51 @@ class ConnectionLine extends fabric.Line {
       y1: sourceCenter.y,
       x2: targetCenter.x,
       y2: targetCenter.y,
+      left: Math.min(sourceCenter.x, targetCenter.x),
+      top: Math.min(sourceCenter.y, targetCenter.y),
     });
 
+    // Update last position
+    this.lastLeft = this.left!;
+    this.lastTop = this.top!;
+
     this.setCoords();
+  }
+
+  // Override containsPoint to implement precise hit detection
+  containsPoint(point: fabric.Point): boolean {
+    const lineStart = new fabric.Point(this.x1!, this.y1!);
+    const lineEnd = new fabric.Point(this.x2!, this.y2!);
+
+    // Calculate distance from point to line
+    const distance = this.distanceFromPointToLine(point, lineStart, lineEnd);
+
+    return distance <= this.hitboxPadding;
+  }
+
+  // Helper method to calculate distance from point to line
+  private distanceFromPointToLine(
+    point: fabric.Point,
+    lineStart: fabric.Point,
+    lineEnd: fabric.Point
+  ): number {
+    const lineLength = lineStart.distanceFrom(lineEnd);
+    if (lineLength === 0) return point.distanceFrom(lineStart);
+
+    const t =
+      ((point.x - lineStart.x) * (lineEnd.x - lineStart.x) +
+        (point.y - lineStart.y) * (lineEnd.y - lineStart.y)) /
+      (lineLength * lineLength);
+
+    if (t < 0) return point.distanceFrom(lineStart);
+    if (t > 1) return point.distanceFrom(lineEnd);
+
+    return point.distanceFrom(
+      new fabric.Point(
+        lineStart.x + t * (lineEnd.x - lineStart.x),
+        lineStart.y + t * (lineEnd.y - lineStart.y)
+      )
+    );
   }
 }
 
@@ -143,6 +227,7 @@ export const drawLine: DrawingTool = {
     const connectionLine = new ConnectionLine(permStartCircle, permEndCircle, {
       stroke: "#000000",
       strokeWidth: 2,
+      selectable: true,
     });
 
     // Add objects to canvas
