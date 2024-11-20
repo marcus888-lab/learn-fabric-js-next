@@ -1,7 +1,7 @@
-import { Canvas, Circle } from "fabric";
-import { DrawingTool, Point } from "./index";
+import * as fabric from "fabric";
+import { DrawingTool, Point } from "./types";
 
-let eraserCursor: Circle | null = null;
+let eraserCursor: fabric.Circle | null = null;
 const ERASER_RADIUS = 10;
 let isErasing = false;
 
@@ -9,7 +9,7 @@ export const drawEraser: DrawingTool = {
   name: "eraser",
   cursor: "none", // Hide default cursor since we'll show a custom one
 
-  init: (canvas: Canvas) => {
+  init: (canvas: fabric.Canvas) => {
     // Disable selection and selection styling
     canvas.selection = false;
     canvas.skipTargetFind = true;
@@ -19,7 +19,7 @@ export const drawEraser: DrawingTool = {
     });
 
     // Create eraser cursor
-    eraserCursor = new Circle({
+    eraserCursor = new fabric.Circle({
       left: 0,
       top: 0,
       radius: ERASER_RADIUS,
@@ -65,7 +65,7 @@ export const drawEraser: DrawingTool = {
     });
   },
 
-  handleMouseDown: (canvas: Canvas, pointer: Point) => {
+  handleMouseDown: (canvas: fabric.Canvas, pointer: Point) => {
     isErasing = true;
     // Initial erase check
     const objects = canvas.getObjects();
@@ -89,7 +89,7 @@ export const drawEraser: DrawingTool = {
     isErasing = false;
   },
 
-  cleanUp: (canvas: Canvas) => {
+  cleanUp: (canvas: fabric.Canvas) => {
     if (eraserCursor) {
       canvas.remove(eraserCursor);
       eraserCursor = null;
