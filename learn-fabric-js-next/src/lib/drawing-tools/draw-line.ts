@@ -42,6 +42,7 @@ class ConnectionLine extends fabric.Line {
     target.on("moving", () => {
       this.updatePosition();
       this.canvas?.requestRenderAll();
+      this.showCircles();
     });
 
     // Show circles in any selected state
@@ -187,9 +188,9 @@ export const drawLine: DrawingTool = {
     isDrawing = true;
 
     startCircle = new fabric.Circle({
-      left: pointer.x - 5,
-      top: pointer.y - 5,
-      radius: 5,
+      left: pointer.x - 10,
+      top: pointer.y - 10,
+      radius: 10,
       fill: "red",
       selectable: true,
       hasControls: false,
@@ -207,9 +208,9 @@ export const drawLine: DrawingTool = {
     }
 
     endCircle = new fabric.Circle({
-      left: pointer.x - 5,
-      top: pointer.y - 5,
-      radius: 5,
+      left: pointer.x - 10,
+      top: pointer.y - 10,
+      radius: 10,
       fill: "red",
       selectable: true,
       hasControls: false,
@@ -228,20 +229,20 @@ export const drawLine: DrawingTool = {
     }
 
     const permStartCircle = new fabric.Circle({
-      left: startPoint.x - 5,
-      top: startPoint.y - 5,
-      radius: 5,
-      fill: "transparent",
+      left: startPoint.x - 10,
+      top: startPoint.y - 10,
+      radius: 10,
+      fill: "red",
       selectable: true,
       hasControls: false,
       hasBorders: false,
     });
 
     const permEndCircle = new fabric.Circle({
-      left: pointer.x - 5,
-      top: pointer.y - 5,
-      radius: 5,
-      fill: "transparent",
+      left: pointer.x - 10,
+      top: pointer.y - 10,
+      radius: 10,
+      fill: "red",
       selectable: true,
       hasControls: false,
       hasBorders: false,
