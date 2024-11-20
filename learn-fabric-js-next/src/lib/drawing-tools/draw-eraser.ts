@@ -1,5 +1,5 @@
 import * as fabric from "fabric";
-import { DrawingTool, Point } from "./index";
+import { DrawingTool, Point } from "./types";
 
 let eraserCursor: fabric.Circle | null = null;
 const ERASER_RADIUS = 10;

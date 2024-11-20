@@ -1,5 +1,5 @@
 import * as fabric from "fabric";
-import { DrawingTool, Point } from "./index";
+import { DrawingTool, Point } from "./types";
 
 let activeShape: fabric.Circle | null = null;
 let startPoint: Point | null = null;

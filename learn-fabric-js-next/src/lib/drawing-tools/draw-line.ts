@@ -1,5 +1,5 @@
 import * as fabric from "fabric";
-import { DrawingTool, Point } from "./index";
+import { DrawingTool, Point } from "./types";
 
 let startPoint: Point | null = null;
 let isDrawing = false;

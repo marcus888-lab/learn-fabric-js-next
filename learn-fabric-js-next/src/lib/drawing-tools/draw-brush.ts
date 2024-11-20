@@ -1,5 +1,5 @@
 import * as fabric from "fabric";
-import { DrawingTool } from "./index";
+import { DrawingTool } from "./types";
 
 export const drawBrush: DrawingTool = {
   name: "brush",

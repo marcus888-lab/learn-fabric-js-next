@@ -1,5 +1,5 @@
 import * as fabric from "fabric";
-import { DrawingTool, Point } from "./index";
+import { DrawingTool, Point } from "./types";
 
 let activePolygon: CustomPolygon | null = null;
 let points: Point[] = [];
@@ -166,7 +166,7 @@ const handleKeyDown = (e: KeyboardEvent, canvas: fabric.Canvas) => {
   }
 };
 
-export const drawPolygon: Tool = {
+export const drawPolygon: DrawingTool = {
   name: "polygon",
   cursor: "crosshair",
 
