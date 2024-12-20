@@ -6,7 +6,8 @@ import { PolygonEdge } from './PolygonEdge';
 export class CustomPolygon extends fabric.Group {
     vertices: PolygonVertex[];
     edges: PolygonEdge[];
-  
+    static type = 'region';
+
     constructor(vertices: PolygonVertex[], edges: PolygonEdge[], options: Partial<fabric.FabricObjectProps> = {}) {
       // 首先將所有物件傳入 super
       const objects = [...vertices, ...edges];
